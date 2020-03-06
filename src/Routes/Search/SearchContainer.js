@@ -6,14 +6,10 @@ export default class extends React.Component {
   state = {
     movieResults: null,
     tvResults: null,
-    searchTerm: "code",
+    searchTerm: "",
     loading: false,
     error: null
   };
-  
-  componentDidMount() {
-    this.handleSubmit();
-  }
 
   handleSubmit = () => {
     const { searchTerm } = this.state;
@@ -37,7 +33,6 @@ export default class extends React.Component {
 
   render() {
     const { movieResults, tvResults, searchTerm, loading, error } = this.state;
-    console.log(this.state)
     return (
       <SearchPresenter
         movieResults={movieResults}
@@ -45,6 +40,7 @@ export default class extends React.Component {
         searchTerm={searchTerm}
         loading={loading}
         error={error}
+        handleSubmit={this.handleSubmit}
       />
     );
   }
