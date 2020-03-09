@@ -58,6 +58,17 @@ const ItemContainer = styled.div`
 
 const Item = styled.span``;
 
+const IMDBItem = styled.a`
+  background-color: #E4B715;
+  border-radius: 4px;
+  padding: 2px 5px;
+  color: black;
+  font-weight: 800;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
 const Divider = styled.span`
   margin: 0 10px;
 `;
@@ -69,7 +80,7 @@ const Overview = styled.p`
   width: 50%;
 `;
 
-const DetailPresenter = ({ result, error, loading }) =>
+const DetailPresenter = ({ result, isMovie, error, loading }) =>
   loading ? (
     <>
       <Helmet>
@@ -80,7 +91,10 @@ const DetailPresenter = ({ result, error, loading }) =>
   ) : (
     <Container>
       <Helmet>
-        <title>{result.original_title ? result.original_title : result.original_name} | Wanflix</title>
+        <title>
+          {result.original_title ? result.original_title : result.original_name}{" "}
+          | Wanflix
+        </title>
       </Helmet>
       <Backdrop
         bgImage={`https://image.tmdb.org/t/p/original${result.backdrop_path}`}
@@ -113,7 +127,38 @@ const DetailPresenter = ({ result, error, loading }) =>
             <Item>
               {result.genres &&
                 result.genres.map((genre, index) =>
-                  index === result.genres.length - 1 ? genre.name : `${genre.name} / `
+                  index === result.genres.length - 1
+                    ? genre.name
+                    : `${genre.name} / `
+                )}
+            </Item>
+            {isMovie ? (
+              <>
+                <Divider>ᐧ</Divider>
+                <Item>
+                  <IMDBItem
+                    onClick={() => {
+                      window.open(
+                        `https://www.imdb.com/title/${result.imdb_id}`,
+                        "_blank"
+                      );
+                    }}
+                  >
+                    IMDb
+                  </IMDBItem>
+                </Item>
+              </>
+            ) : (
+              ""
+            )}
+
+            <Divider>ᐧ</Divider>
+            <Item>
+              {result.genres &&
+                result.genres.map((genre, index) =>
+                  index === result.genres.length - 1
+                    ? genre.name
+                    : `${genre.name} / `
                 )}
             </Item>
           </ItemContainer>
