@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.js": "/wanflix/static/js/main.baf6e23e.chunk.js",
+    "main.js.map": "/wanflix/static/js/main.baf6e23e.chunk.js.map",
+    "runtime-main.js": "/wanflix/static/js/runtime-main.1e376061.js",
+    "runtime-main.js.map": "/wanflix/static/js/runtime-main.1e376061.js.map",
+    "static/js/2.d930237b.chunk.js": "/wanflix/static/js/2.d930237b.chunk.js",
+    "static/js/2.d930237b.chunk.js.map": "/wanflix/static/js/2.d930237b.chunk.js.map",
+    "index.html": "/wanflix/index.html",
+    "precache-manifest.976b34419b2a9a9c475797d9a9c4e92d.js": "/wanflix/precache-manifest.976b34419b2a9a9c475797d9a9c4e92d.js",
+    "service-worker.js": "/wanflix/service-worker.js",
+    "static/js/2.d930237b.chunk.js.LICENSE.txt": "/wanflix/static/js/2.d930237b.chunk.js.LICENSE.txt",
+    "static/media/noPosterSmall.png": "/wanflix/static/media/noPosterSmall.87a0eb6a.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.1e376061.js",
+    "static/js/2.d930237b.chunk.js",
+    "static/js/main.baf6e23e.chunk.js"
+  ]
+}
