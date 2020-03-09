@@ -151,15 +151,12 @@ const DetailPresenter = ({ result, isMovie, error, loading }) =>
             ) : (
               ""
             )}
-
             <Divider>ᐧ</Divider>
             <Item>
-              {result.genres &&
-                result.genres.map((genre, index) =>
-                  index === result.genres.length - 1
-                    ? genre.name
-                    : `${genre.name} / `
-                )}
+              <span role="img" aria-label="rating">
+                ⭐️
+              </span>{" "}
+              {result.vote_average}/10
             </Item>
           </ItemContainer>
           <Overview>{result.overview}</Overview>
