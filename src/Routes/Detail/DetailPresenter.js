@@ -1,8 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Helmet from "react-helmet";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import Loader from "Components/Loader";
+import Video from "Components/Video";
+import Company from "Components/Company";
+import Season from "Components/Season";
 
 const Container = styled.div`
   height: calc(100vh - 50px);
@@ -78,9 +81,54 @@ const Overview = styled.p`
   opacity: 0.7;
   line-height: 1.5;
   width: 50%;
+  margin-bottom: 12px;
 `;
 
-const DetailPresenter = ({ result, isMovie, error, loading }) =>
+const TabCategoriesContainer = styled.div`
+  display: flex;
+  justify-content: space-around;
+  padding: 1rem;
+  margin-bottom: 16px;
+  width: 50%;
+  background-color: rgba(0, 0, 0, .5);
+`;
+
+const TabCategory = styled.div`
+  cursor: pointer;
+  &:hover {
+    color: gray;
+  }
+  ${props =>
+    props.active && css`
+      font-weight: 600;
+    `}
+`;
+
+const DetailInfoContainer = styled.div`
+  display: flex;
+  width: 50%;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+`;
+
+const DetailPresenter = ({
+  result,
+  isMovie,
+  error,
+  loading,
+  videos,
+  production_companies,
+  production_countries,
+  spoken_languages,
+  seasons,
+  created_by,
+  toggleCompanies,
+  toggleCountries,
+  toggleLanguages,
+  toggleVideos,
+  toggleSeasons,
+  toggleCreator
+}) =>
   loading ? (
     <>
       <Helmet>
@@ -160,6 +208,22 @@ const DetailPresenter = ({ result, isMovie, error, loading }) =>
             </Item>
           </ItemContainer>
           <Overview>{result.overview}</Overview>
+          <TabCategoriesContainer>
+            { result.videos && result.videos.length > 0 ? <TabCategory onClick={toggleVideos}>Videos</TabCategory> : "" }
+            { isMovie === false && result.seasons ? <TabCategory onClick={toggleSeasons}>Seasons</TabCategory> : "" }
+            { isMovie === false && result.created_by ? <TabCategory onClick={toggleCreator}>Created by</TabCategory> : "" }
+            { result.production_companies ? <TabCategory onClick={toggleCompanies}>Companies</TabCategory> : "" }
+            { result.production_countries ? <TabCategory onClick={toggleCountries}>Countries</TabCategory> : "" }
+            { result.spoken_languages ? <TabCategory onClick={toggleLanguages}>Languages</TabCategory> : "" }
+          </TabCategoriesContainer>
+          <DetailInfoContainer>
+            { videos ? result.videos.results.map(video => <Video key={video.id} path={video.key} />) : "" }
+            { production_companies ? result.production_companies.map(company => <Company key={company.id} name={company.name} logo={company.logo_path} />) : "" }
+            { production_countries ? result.production_countries.map(country => <span key={country.name}>{country.name}</span>) : "" }
+            { spoken_languages ? result.spoken_languages.map(language => <span key={language.name}>{language.name}</span>) : "" }
+            { created_by ? result.created_by.map(creator => <span key={creator.credit_id}>{creator.name}</span>) : "" }
+            { seasons ? result.seasons.map(season => <Season key={season.id} name={season.name} episode={season.episode_count} date={season.air_date} />) : "" }
+          </DetailInfoContainer>
         </Data>
       </Content>
     </Container>

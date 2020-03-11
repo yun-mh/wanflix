@@ -10,8 +10,80 @@ export default class extends React.Component {
       result: null,
       error: null,
       loading: true,
-      isMovie: pathname.includes("/movie/")
+      isMovie: pathname.includes("/movie/"),
+      videos: false,
+      production_companies: false,
+      production_countries: false,
+      spoken_languages: false,
+      seasons: false,
+      created_by: false
     };
+  }
+
+  toggleVideos = () => {
+    this.setState({
+      videos: true,
+      production_companies: false,
+      production_countries: false,
+      spoken_languages: false,
+      seasons: false,
+      created_by: false
+    });
+  }
+
+  toggleCompanies = () => {
+    this.setState({
+      videos: false,
+      production_companies: true,
+      production_countries: false,
+      spoken_languages: false,
+      seasons: false,
+      created_by: false
+    });
+  }
+
+  toggleCountries = () => {
+    this.setState({
+      videos: false,
+      production_companies: false,
+      production_countries: true,
+      spoken_languages: false,
+      seasons: false,
+      created_by: false
+    });
+  }
+
+  toggleLanguages = () => {
+    this.setState({
+      videos: false,
+      production_companies: false,
+      production_countries: false,
+      spoken_languages: true,
+      seasons: false,
+      created_by: false
+    });
+  }
+
+  toggleSeasons = () => {
+    this.setState({
+      videos: false,
+      production_companies: false,
+      production_countries: false,
+      spoken_languages: false,
+      seasons: true,
+      created_by: false
+    });
+  }
+
+  toggleCreator = () => {
+    this.setState({
+      videos: false,
+      production_companies: false,
+      production_countries: false,
+      spoken_languages: false,
+      seasons: false,
+      created_by: true
+    });
   }
 
   async componentDidMount() {
@@ -36,13 +108,36 @@ export default class extends React.Component {
   }
 
   render() {
-    const { result, isMovie, error, loading } = this.state;
+    const {
+      result,
+      isMovie,
+      error,
+      loading,
+      videos,
+      production_companies,
+      production_countries,
+      spoken_languages,
+      seasons,
+      created_by
+    } = this.state;
     return (
       <DetailPresenter
         result={result}
         isMovie={isMovie}
         error={error}
         loading={loading}
+        videos={videos}
+        production_companies={production_companies}
+        production_countries={production_countries}
+        spoken_languages={spoken_languages}
+        seasons={seasons}
+        created_by={created_by}
+        toggleCountries={this.toggleCountries}
+        toggleCompanies={this.toggleCompanies}
+        toggleVideos={this.toggleVideos}
+        toggleLanguages={this.toggleLanguages}
+        toggleSeasons={this.toggleSeasons}
+        toggleCreator={this.toggleCreator}
       />
     );
   }

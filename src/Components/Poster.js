@@ -47,8 +47,6 @@ const Year = styled.span`
     color: rgba(255, 255, 255, 0.5);
 `;
 
-
-
 const Poster = ({ id, imageUrl, title, rating, year, isMovie = false }) => (
     <Link to={isMovie ? `/movie/${id}` : `/show/${id}`}>
         <Container>
