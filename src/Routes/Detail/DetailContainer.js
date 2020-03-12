@@ -99,9 +99,10 @@ export default class extends React.Component {
         ({data: result} = await moviesApi.movieDetail(parsedId));
       } else {
         ({data: result} = await tvApi.showDetail(parsedId));
+        console.log(result)
       }
     } catch {
-      this.setState({ error: "Cannot find the target."})
+      this.setState({ error: "Cannot find the item."})
     } finally {
       this.setState({ loading: false, result })
     }

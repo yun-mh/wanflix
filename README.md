@@ -24,8 +24,8 @@ Learning React and ES6 by building a Movie discover app.
 
 - [x] IMDB Link
 - [x] Tabs inside of Movie / Show Details (YT videos, production company, Countries)
-- [ ] Collections Link
-- [ ] /collection Route
+- [x] Collections Link
+- [x] /collection Route
 - [x] On TV shows, show seasons and creators
 
 # Preview:

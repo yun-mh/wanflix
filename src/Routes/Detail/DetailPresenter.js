@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import Helmet from "react-helmet";
 import styled, { css } from "styled-components";
@@ -6,6 +7,7 @@ import Loader from "Components/Loader";
 import Video from "Components/Video";
 import Company from "Components/Company";
 import Season from "Components/Season";
+import Message from "Components/Message";
 
 const Container = styled.div`
   height: calc(100vh - 50px);
@@ -69,6 +71,18 @@ const IMDBItem = styled.a`
   font-weight: 800;
   &:hover {
     cursor: pointer;
+    opacity: 0.7;
+  }
+`;
+
+const CollectionItem = styled(Link)`
+  background-color: lightgray;
+  border-radius: 4px;
+  padding: 2px 5px;
+  color: black;
+  &:hover {
+    cursor: pointer;
+    opacity: 0.7;
   }
 `;
 
@@ -136,6 +150,8 @@ const DetailPresenter = ({
       </Helmet>
       <Loader />
     </>
+  ) : error ? (
+    error && <Message color="#e74c3c" text={error} />
   ) : (
     <Container>
       <Helmet>
@@ -180,6 +196,13 @@ const DetailPresenter = ({
                     : `${genre.name} / `
                 )}
             </Item>
+            <Divider>ᐧ</Divider>
+            <Item>
+              <span role="img" aria-label="rating">
+                ⭐️
+              </span>{" "}
+              {result.vote_average}/10
+            </Item>
             {isMovie ? (
               <>
                 <Divider>ᐧ</Divider>
@@ -199,30 +222,92 @@ const DetailPresenter = ({
             ) : (
               ""
             )}
-            <Divider>ᐧ</Divider>
-            <Item>
-              <span role="img" aria-label="rating">
-                ⭐️
-              </span>{" "}
-              {result.vote_average}/10
-            </Item>
+            {result.belongs_to_collection ? (
+              <>
+                <Divider>ᐧ</Divider>
+                <CollectionItem
+                  to={`/collection/${result.belongs_to_collection.id}`}
+                >
+                  Collection
+                </CollectionItem>
+              </>
+            ) : (
+              ""
+            )}
           </ItemContainer>
           <Overview>{result.overview}</Overview>
           <TabCategoriesContainer>
-            { result.videos && result.videos.length > 0 ? <TabCategory onClick={toggleVideos}>Videos</TabCategory> : "" }
-            { isMovie === false && result.seasons ? <TabCategory onClick={toggleSeasons}>Seasons</TabCategory> : "" }
-            { isMovie === false && result.created_by ? <TabCategory onClick={toggleCreator}>Created by</TabCategory> : "" }
-            { result.production_companies ? <TabCategory onClick={toggleCompanies}>Companies</TabCategory> : "" }
-            { result.production_countries ? <TabCategory onClick={toggleCountries}>Countries</TabCategory> : "" }
-            { result.spoken_languages ? <TabCategory onClick={toggleLanguages}>Languages</TabCategory> : "" }
+            {result.videos && result.videos.results.length > 0 ? (
+              <TabCategory onClick={toggleVideos}>Videos</TabCategory>
+            ) : (
+              ""
+            )}
+            {isMovie === false && result.seasons && result.seasons.length > 0 ? (
+              <TabCategory onClick={toggleSeasons}>Seasons</TabCategory>
+            ) : (
+              ""
+            )}
+            {isMovie === false && result.created_by && result.created_by.length > 0 ? (
+              <TabCategory onClick={toggleCreator}>Created by</TabCategory>
+            ) : (
+              ""
+            )}
+            {result.production_companies && result.production_companies.length > 0 ? (
+              <TabCategory onClick={toggleCompanies}>Companies</TabCategory>
+            ) : (
+              ""
+            )}
+            {result.production_countries && result.production_countries.length > 0 ? (
+              <TabCategory onClick={toggleCountries}>Countries</TabCategory>
+            ) : (
+              ""
+            )}
+            {result.spoken_languages && result.spoken_languages.length > 0 ? (
+              <TabCategory onClick={toggleLanguages}>Languages</TabCategory>
+            ) : (
+              ""
+            )}
           </TabCategoriesContainer>
           <DetailInfoContainer>
-            { videos ? result.videos.results.map(video => <Video key={video.id} path={video.key} />) : "" }
-            { production_companies ? result.production_companies.map(company => <Company key={company.id} name={company.name} logo={company.logo_path} />) : "" }
-            { production_countries ? result.production_countries.map(country => <span key={country.name}>{country.name}</span>) : "" }
-            { spoken_languages ? result.spoken_languages.map(language => <span key={language.name}>{language.name}</span>) : "" }
-            { created_by ? result.created_by.map(creator => <span key={creator.credit_id}>{creator.name}</span>) : "" }
-            { seasons ? result.seasons.map(season => <Season key={season.id} name={season.name} episode={season.episode_count} date={season.air_date} />) : "" }
+            {videos && result.videos.results.length > 0
+              ? result.videos.results.map(video => (
+                  <Video key={video.id} path={video.key} />
+                ))
+              : ""}
+            {production_companies && result.production_companies.length > 0
+              ? result.production_companies.map(company => (
+                  <Company
+                    key={company.id}
+                    name={company.name}
+                    logo={company.logo_path}
+                  />
+                ))
+              : ""}
+            {production_countries && result.production_countries.length > 0
+              ? result.production_countries.map(country => (
+                  <span key={country.name}>{country.name}</span>
+                ))
+              : ""}
+            {spoken_languages && result.spoken_languages.length > 0
+              ? result.spoken_languages.map(language => (
+                  <span key={language.name}>{language.name}</span>
+                ))
+              : ""}
+            {created_by && result.created_by.length > 0
+              ? result.created_by.map(creator => (
+                  <span key={creator.credit_id}>{creator.name}</span>
+                ))
+              : ""}
+            {seasons
+              ? result.seasons.map(season => (
+                  <Season
+                    key={season.id}
+                    name={season.name}
+                    episode={season.episode_count}
+                    date={season.air_date}
+                  />
+                ))
+              : ""}
           </DetailInfoContainer>
         </Data>
       </Content>

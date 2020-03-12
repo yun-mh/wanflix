@@ -4,7 +4,7 @@ const api = axios.create({
     baseURL: "https://api.themoviedb.org/3/",
     params: {
         api_key: "e6f3d7d9dca37fb87ff22fa6891510ad",
-        language: "ko-KR",
+        language: "en-US",
     }
 });
 
@@ -38,4 +38,8 @@ export const tvApi = {
             query: encodeURIComponent(term)
         }
     })
+};
+
+export const collectionApi = {
+    collectionDetail: id => api.get(`collection/${id}`)
 };
