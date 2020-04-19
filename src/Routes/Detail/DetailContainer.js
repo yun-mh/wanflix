@@ -5,7 +5,9 @@ import { moviesApi, tvApi } from "../../api";
 export default class extends React.Component {
   constructor(props) {
     super(props);
-    const { location: { pathname } } = props;
+    const {
+      location: { pathname },
+    } = props;
     this.state = {
       result: null,
       error: null,
@@ -16,7 +18,7 @@ export default class extends React.Component {
       production_countries: false,
       spoken_languages: false,
       seasons: false,
-      created_by: false
+      origin_country: false,
     };
   }
 
@@ -27,9 +29,9 @@ export default class extends React.Component {
       production_countries: false,
       spoken_languages: false,
       seasons: false,
-      created_by: false
+      origin_country: false,
     });
-  }
+  };
 
   toggleCompanies = () => {
     this.setState({
@@ -38,9 +40,9 @@ export default class extends React.Component {
       production_countries: false,
       spoken_languages: false,
       seasons: false,
-      created_by: false
+      origin_country: false,
     });
-  }
+  };
 
   toggleCountries = () => {
     this.setState({
@@ -49,9 +51,9 @@ export default class extends React.Component {
       production_countries: true,
       spoken_languages: false,
       seasons: false,
-      created_by: false
+      origin_country: false,
     });
-  }
+  };
 
   toggleLanguages = () => {
     this.setState({
@@ -60,9 +62,9 @@ export default class extends React.Component {
       production_countries: false,
       spoken_languages: true,
       seasons: false,
-      created_by: false
+      origin_country: false,
     });
-  }
+  };
 
   toggleSeasons = () => {
     this.setState({
@@ -71,23 +73,28 @@ export default class extends React.Component {
       production_countries: false,
       spoken_languages: false,
       seasons: true,
-      created_by: false
+      origin_country: false,
     });
-  }
+  };
 
-  toggleCreator = () => {
+  toggleOriginCountry = () => {
     this.setState({
       videos: false,
       production_companies: false,
       production_countries: false,
       spoken_languages: false,
       seasons: false,
-      created_by: true
+      origin_country: true,
     });
-  }
+  };
 
   async componentDidMount() {
-    const { match: { params: { id }}, history: { push } } = this.props;
+    const {
+      match: {
+        params: { id },
+      },
+      history: { push },
+    } = this.props;
     const { isMovie } = this.state;
     const parsedId = parseInt(id);
     if (isNaN(parsedId)) {
@@ -96,15 +103,15 @@ export default class extends React.Component {
     let result = null;
     try {
       if (isMovie) {
-        ({data: result} = await moviesApi.movieDetail(parsedId));
+        ({ data: result } = await moviesApi.movieDetail(parsedId));
       } else {
-        ({data: result} = await tvApi.showDetail(parsedId));
-        console.log(result)
+        ({ data: result } = await tvApi.showDetail(parsedId));
       }
+      console.log(result);
     } catch {
-      this.setState({ error: "Cannot find the item."})
+      this.setState({ error: "Cannot find the item." });
     } finally {
-      this.setState({ loading: false, result })
+      this.setState({ loading: false, result });
     }
   }
 
@@ -119,7 +126,7 @@ export default class extends React.Component {
       production_countries,
       spoken_languages,
       seasons,
-      created_by
+      origin_country,
     } = this.state;
     return (
       <DetailPresenter
@@ -132,13 +139,13 @@ export default class extends React.Component {
         production_countries={production_countries}
         spoken_languages={spoken_languages}
         seasons={seasons}
-        created_by={created_by}
+        origin_country={origin_country}
         toggleCountries={this.toggleCountries}
         toggleCompanies={this.toggleCompanies}
         toggleVideos={this.toggleVideos}
         toggleLanguages={this.toggleLanguages}
         toggleSeasons={this.toggleSeasons}
-        toggleCreator={this.toggleCreator}
+        toggleOriginCountry={this.toggleOriginCountry}
       />
     );
   }

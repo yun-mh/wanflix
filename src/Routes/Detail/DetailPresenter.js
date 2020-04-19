@@ -22,7 +22,7 @@ const Backdrop = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url(${props => props.bgImage});
+  background-image: url(${(props) => props.bgImage});
   background-position: center center;
   background-size: cover;
   filter: blur(4px);
@@ -40,7 +40,7 @@ const Content = styled.div`
 
 const Cover = styled.div`
   width: 30%;
-  background-image: url(${props => props.bgImage});
+  background-image: url(${(props) => props.bgImage});
   background-position: center center;
   background-size: cover;
   height: 100%;
@@ -64,7 +64,7 @@ const ItemContainer = styled.div`
 const Item = styled.span``;
 
 const IMDBItem = styled.a`
-  background-color: #E4B715;
+  background-color: #e4b715;
   border-radius: 4px;
   padding: 2px 5px;
   color: black;
@@ -104,7 +104,7 @@ const TabCategoriesContainer = styled.div`
   padding: 1rem;
   margin-bottom: 16px;
   width: 50%;
-  background-color: rgba(0, 0, 0, .5);
+  background-color: rgba(0, 0, 0, 0.5);
 `;
 
 const TabCategory = styled.div`
@@ -112,8 +112,9 @@ const TabCategory = styled.div`
   &:hover {
     color: gray;
   }
-  ${props =>
-    props.active && css`
+  ${(props) =>
+    props.active &&
+    css`
       font-weight: 600;
     `}
 `;
@@ -121,8 +122,10 @@ const TabCategory = styled.div`
 const DetailInfoContainer = styled.div`
   display: flex;
   width: 50%;
+  max-height: 65%;
   justify-content: space-evenly;
   flex-wrap: wrap;
+  overflow: auto;
 `;
 
 const DetailPresenter = ({
@@ -135,13 +138,13 @@ const DetailPresenter = ({
   production_countries,
   spoken_languages,
   seasons,
-  created_by,
+  origin_country,
   toggleCompanies,
   toggleCountries,
   toggleLanguages,
   toggleVideos,
   toggleSeasons,
-  toggleCreator
+  toggleOriginCountry,
 }) =>
   loading ? (
     <>
@@ -185,7 +188,7 @@ const DetailPresenter = ({
             </Item>
             <Divider>ᐧ</Divider>
             <Item>
-              {result.runtime ? result.runtime : result.episode_run_time[0]} min
+              {result.runtime ? result.runtime : result.episode_run_time} min
             </Item>
             <Divider>ᐧ</Divider>
             <Item>
@@ -203,25 +206,23 @@ const DetailPresenter = ({
               </span>{" "}
               {result.vote_average}/10
             </Item>
-            {isMovie ? (
-              <>
-                <Divider>ᐧ</Divider>
-                <Item>
-                  <IMDBItem
-                    onClick={() => {
-                      window.open(
-                        `https://www.imdb.com/title/${result.imdb_id}`,
-                        "_blank"
-                      );
-                    }}
-                  >
-                    IMDb
-                  </IMDBItem>
-                </Item>
-              </>
-            ) : (
-              ""
-            )}
+            <Divider>ᐧ</Divider>
+            <Item>
+              <IMDBItem
+                onClick={() => {
+                  window.open(
+                    `https://www.imdb.com/title/${
+                      result.imdb_id
+                        ? result.imdb_id
+                        : result.external_ids.imdb_id
+                    }`,
+                    "_blank"
+                  );
+                }}
+              >
+                IMDb
+              </IMDBItem>
+            </Item>
             {result.belongs_to_collection ? (
               <>
                 <Divider>ᐧ</Divider>
@@ -242,22 +243,21 @@ const DetailPresenter = ({
             ) : (
               ""
             )}
-            {isMovie === false && result.seasons && result.seasons.length > 0 ? (
-              <TabCategory onClick={toggleSeasons}>Seasons</TabCategory>
+            {isMovie === false &&
+            result.origin_country &&
+            result.origin_country.length > 0 ? (
+              <TabCategory onClick={toggleOriginCountry}>Countries</TabCategory>
             ) : (
               ""
             )}
-            {isMovie === false && result.created_by && result.created_by.length > 0 ? (
-              <TabCategory onClick={toggleCreator}>Created by</TabCategory>
-            ) : (
-              ""
-            )}
-            {result.production_companies && result.production_companies.length > 0 ? (
+            {result.production_companies &&
+            result.production_companies.length > 0 ? (
               <TabCategory onClick={toggleCompanies}>Companies</TabCategory>
             ) : (
               ""
             )}
-            {result.production_countries && result.production_countries.length > 0 ? (
+            {result.production_countries &&
+            result.production_countries.length > 0 ? (
               <TabCategory onClick={toggleCountries}>Countries</TabCategory>
             ) : (
               ""
@@ -267,15 +267,22 @@ const DetailPresenter = ({
             ) : (
               ""
             )}
+            {isMovie === false &&
+            result.seasons &&
+            result.seasons.length > 0 ? (
+              <TabCategory onClick={toggleSeasons}>Seasons</TabCategory>
+            ) : (
+              ""
+            )}
           </TabCategoriesContainer>
           <DetailInfoContainer>
             {videos && result.videos.results.length > 0
-              ? result.videos.results.map(video => (
+              ? result.videos.results.map((video) => (
                   <Video key={video.id} path={video.key} />
                 ))
               : ""}
             {production_companies && result.production_companies.length > 0
-              ? result.production_companies.map(company => (
+              ? result.production_companies.map((company) => (
                   <Company
                     key={company.id}
                     name={company.name}
@@ -284,26 +291,27 @@ const DetailPresenter = ({
                 ))
               : ""}
             {production_countries && result.production_countries.length > 0
-              ? result.production_countries.map(country => (
+              ? result.production_countries.map((country) => (
                   <span key={country.name}>{country.name}</span>
                 ))
               : ""}
             {spoken_languages && result.spoken_languages.length > 0
-              ? result.spoken_languages.map(language => (
+              ? result.spoken_languages.map((language) => (
                   <span key={language.name}>{language.name}</span>
                 ))
               : ""}
-            {created_by && result.created_by.length > 0
-              ? result.created_by.map(creator => (
-                  <span key={creator.credit_id}>{creator.name}</span>
+            {origin_country && result.origin_country.length > 0
+              ? result.origin_country.map((country, index) => (
+                  <span key={index}>{country}</span>
                 ))
               : ""}
             {seasons
-              ? result.seasons.map(season => (
+              ? result.seasons.map((season) => (
                   <Season
                     key={season.id}
                     name={season.name}
                     episode={season.episode_count}
+                    poster={season.poster_path}
                     date={season.air_date}
                   />
                 ))
@@ -315,9 +323,9 @@ const DetailPresenter = ({
   );
 
 DetailPresenter.propTypes = {
-    result: PropTypes.object,
-    error: PropTypes.string,
-    loading: PropTypes.bool.isRequired,
-}
+  result: PropTypes.object,
+  error: PropTypes.string,
+  loading: PropTypes.bool.isRequired,
+};
 
 export default DetailPresenter;
