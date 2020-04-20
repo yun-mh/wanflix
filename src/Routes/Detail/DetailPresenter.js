@@ -104,7 +104,7 @@ const TabCategoriesContainer = styled.div`
   padding: 1rem;
   margin-bottom: 16px;
   width: 50%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: ${({ theme: { theme } }) => theme.bodyTransparent};
 `;
 
 const TabCategory = styled.div`
